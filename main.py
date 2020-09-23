@@ -183,9 +183,9 @@ df["Words"] = df["Rtitle"].apply(preprocess2)
 
 df.to_csv(data_path+"df_lda.csv", index=False)
 
-cluster_topic_freq_word_year_10 = cluster_topic_freq_word_year_10(df)
+freq_word = cluster_topic_freq_word_year_10(df)
 
-df["Freq_words"] = df.apply(get_freq_words, args=(cluster_topic_freq_word_year_10, ),axis=1)
+df["Freq_words"] = df.apply(get_freq_words, args=(freq_word, ),axis=1)
 
 df.to_csv(data_path+"df_freq.csv", index=False)
 
