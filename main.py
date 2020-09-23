@@ -63,7 +63,7 @@ title_dictionary_s = []
 best=[]
 
 for cluster_number in range(0, clusters_number):
-    LDA_model, title_bow, title_dictionary, best_index = do_LDA(df, cluster_number, 4, 37, 2)
+    LDA_model, title_bow, title_dictionary, best_index = do_LDA(df, cluster_number, 4, 41, 2)
     LDA_models.append(LDA_model)
     title_bow_s.append(title_bow)
     title_dictionary_s.append(title_dictionary)
