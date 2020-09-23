@@ -226,7 +226,7 @@ def get_freq_words(row, words):
 
 df = pd.read_csv("preprocess.csv")
 
-clusters_number = 11
+clusters_number = 25
 df = get_clusters(df, clusters_number)
 
 LDA_models = []
