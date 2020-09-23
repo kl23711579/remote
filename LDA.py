@@ -116,3 +116,4 @@ def set_topic_prob(row, model, dictionary, best):
     c = row["Cluster_ID"]
     b = dictionary[c].doc2bow(preprocess(row["Rtitle"]))
     result = sorted(model[c][best[c]][b], key=lambda x: x[1], reverse=True)[0]
+    return result
