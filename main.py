@@ -26,21 +26,22 @@ import os, sys, re
 from collections import Counter
 
 rs = 7
+data_path = "/home/n10367071/remote/data/"
 
 def get_clusters(df, cluster_number):
-    with open("cluster_result.pkl", "rb") as f:
+    with open(data_path+"cluster_result.pkl", "rb") as f:
         cluster_result = pickle.load(f)
 
     clusters = cluster_result[0]
 
-    with open("training_data.pkl", "rb") as f:
+    with open(data_path+"training_data.pkl", "rb") as f:
         X = pickle.load(f)
 
     y = clusters[cluster_number-2].predict(X)
 
     df["Cluster_ID"] = y
 
-    with open("df_cluster.pkl", "wb") as f:
+    with open(data_path+"df_cluster.pkl", "wb") as f:
         pickle.dump(df, f)
 
     return df
@@ -85,7 +86,7 @@ def lda_tfidf(num_topics, tfidf, text, dictionary, random_state, cluster_ID):
         
     plt.figure(figsize=(20,10))
     plt.plot(num_topics, coherence_ldas, marker='o', markersize=10)
-    plt.savefig(f"{cluster_ID}.png")
+    plt.savefig(f"{data_path}{cluster_ID}.png")
     
     best_index = coherence_ldas.index(max(coherence_ldas))
     # get best result
@@ -147,7 +148,7 @@ def freq_words(df):
         common = [i for i in Counter(word).most_common(10)]
         cluster_freq_words.append(common)
 
-    with open("./freq_words/cluster_freq_words.pkl", "wb") as f:
+    with open(data_path+"freq_words/cluster_freq_words.pkl", "wb") as f:
         pickle.dump(cluster_freq_words, f)
 
     cluster_freq_words_years = []
@@ -162,7 +163,7 @@ def freq_words(df):
             common = [i for i in Counter(word).most_common(10)]
             cluster_freq_words_years[cluster][year] = common
 
-    with open("./freq_words/cluster_freq_words_years.pkl", "wb") as f:
+    with open(data_path+"freq_words/cluster_freq_words_years.pkl", "wb") as f:
         pickle.dump(cluster_freq_words_years, f)
 
     cluster_topic_freq_words = []
@@ -177,7 +178,7 @@ def freq_words(df):
             common = [i for i in Counter(word).most_common(10)]
             cluster_topic_freq_words[cluster][topicid] = common
 
-    with open("./freq_words/cluster_topic_freq_words.pkl", "wb") as f:
+    with open(data_path+"freq_words/cluster_topic_freq_words.pkl", "wb") as f:
         pickle.dump(cluster_topic_freq_words, f)
 
 
@@ -198,7 +199,7 @@ def freq_words(df):
                 common = [i for i in Counter(word).most_common(10)]
                 cluster_topic_freq_words_years[cluster][topicid][year] = common
 
-    with open("./freq_words/cluster_topic_freq_words_years.pkl", "wb") as f:
+    with open(data_path+"freq_words/cluster_topic_freq_words_years.pkl", "wb") as f:
         pickle.dump(cluster_topic_freq_words_years, f)
 
     return cluster_topic_freq_words_years 
@@ -224,7 +225,7 @@ def get_freq_words(row, words):
         w = ""
     return w
 
-df = pd.read_csv("preprocess.csv")
+df = pd.read_csv(data_path+"preprocess.csv")
 
 clusters_number = 25
 df = get_clusters(df, clusters_number)
@@ -245,30 +246,30 @@ df["LDA_result"] = df.apply(set_topic_prob, args=(LDA_models, title_dictionary_s
 df[["Topic_ID", "Prob"]] = pd.DataFrame(df['LDA_result'].tolist(), index=df.index)
 df["Words"] = df["Rtitle"].apply(preprocess2)
 
-df.to_csv("df_lda.csv", index=False)
+df.to_csv(data_path+"df_lda.csv", index=False)
 
 cluster_topic_freq_words_years = freq_words(df)
 
 df["Freq_words"] = df.apply(get_freq_words, args=(cluster_topic_freq_words_years, ),axis=1)
 
-df.to_csv("df_freq.csv", index=False)
+df.to_csv(data_path+"df_freq.csv", index=False)
 
-with open("LDA_models.pkl", "wb") as f:
+with open(data_path+"LDA_models.pkl", "wb") as f:
 	pickle.dump(LDA_models, f)
 
-with open("title_bow_s.pkl", "wb") as f:
+with open(data_path+"title_bow_s.pkl", "wb") as f:
 	pickle.dump(title_bow_s, f)
 
-with open("title_dictionary_s.pkl", "wb") as f:
+with open(data_path+"title_dictionary_s.pkl", "wb") as f:
 	pickle.dump(title_dictionary_s, f)
 
-with open("best.pkl", "wb") as f:
+with open(data_path+"best.pkl", "wb") as f:
 	pickle.dump(best, f)
 
-with open("df_lda.pkl", "wb") as f:
+with open(data_path+"df_lda.pkl", "wb") as f:
     pickle.dump(df, f)
 
-with open("df_freq.pkl", "wb") as f:
+with open(data_path+"df_freq.pkl", "wb") as f:
     pickle.dump(df, f)
 
 

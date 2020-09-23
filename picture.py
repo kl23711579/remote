@@ -24,15 +24,16 @@ import matplotlib.pyplot as plt
 import os, sys, re
 
 rs = 7
+data_path = "/home/n10367071/remote/data/"
 
-with open("clusterr_result.pkl", "rb") as f:
+with open(data_path+"clusterr_result.pkl", "rb") as f:
     cluster_result = pickle.load(f)
 
-with open("training_data.pkl", "rb") as f:
+with open(data_path+"training_data.pkl", "rb") as f:
     X = pickle.load(f)
 
 clusters = cluster_result[0]
 inertia_vals = cluster_result[1]
 
 plt.plot(range(2,15,1), inertia_vals, marker='*')
-plt.savefig("output.png")
+plt.savefig(data_path+"output.png")
