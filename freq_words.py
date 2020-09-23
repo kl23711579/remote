@@ -8,8 +8,6 @@ rs = 7
 data_path = "/home/n10367071/remote/data/"
 
 def cluster_freq_word(df=None):
-    # with open("df_lda.pkl", "rb") as f:
-    #     df = pickle.load(f)
     '''
     Count freq words depends on Cluster.
     '''

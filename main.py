@@ -6,7 +6,7 @@ import pickle
 
 import os, sys, re
 
-from df_freq import cluster_topic_freq_word_year_10
+from Freq_words import cluster_topic_freq_word_year_10
 from LDA import do_LDA, preprocess2, set_topic_prob
 
 rs = 7
