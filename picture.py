@@ -35,5 +35,5 @@ with open(data_path+"training_data.pkl", "rb") as f:
 clusters = cluster_result[0]
 inertia_vals = cluster_result[1]
 
-plt.plot(range(2,15,1), inertia_vals, marker='*')
+plt.plot(range(2,30,1), inertia_vals, marker='*')
 plt.savefig(data_path+"output.png")
