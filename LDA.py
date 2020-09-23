@@ -11,10 +11,6 @@ from nltk.stem import WordNetLemmatizer, SnowballStemmer
 from nltk.stem.porter import *
 from nltk.corpus import stopwords
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
-
 import nltk
 import string
 import pickle
@@ -24,19 +20,17 @@ import matplotlib.pyplot as plt
 import os, sys, re
 
 rs = 7
-
-df = pd.read_csv("df_cluster.csv")
+data_path = "/home/n10367071/remote/data/"
 
 stemmer = SnowballStemmer('english')
 nltk_stopwords = stopwords.words('english')
 QUEENSLAND_RESOURCE_PERMIT = ['atp', 'daa', 'epc', 'epg', 'epm', 'epq', 'gl', 'mc', 'mdl', 
-                              'mfs', 'ml', 'oep', 'pca', 'pfl',' pga', 'pl', 'pp', 'ppl',
-                              'ppp', 'psa', 'psl', 'ql', 'wma']
+                            'mfs', 'ml', 'oep', 'pca', 'pfl',' pga', 'pl', 'pp', 'ppl',
+                            'ppp', 'psa', 'psl', 'ql', 'wma']
 # gsq = GEOLOGICAL SURVEY OF QUEENSLAND
 OTHER_STOPWORDS = ['a-p', 'A-P', 'ap', 'AP', 'epp']
 nltk_stopwords.extend(QUEENSLAND_RESOURCE_PERMIT)
 nltk_stopwords.extend(OTHER_STOPWORDS)
-
 
 def preprocess(text):
     text = text.lower()
@@ -66,8 +60,10 @@ def lda_tfidf(num_topics, tfidf, text, dictionary, random_state, cluster_ID):
         LDA_models.append(lda_tfidfmodel)
         coherence_ldas.append(coherence_lda) 
         
-    plt.plot(num_topics, coherence_ldas, marker='*')
-    plt.savefig(f"{cluster_ID}.png")
+    plt.figure(figsize=(20,10))
+    plt.plot(num_topics, coherence_ldas, marker='o', markersize=10)
+    plt.savefig(f"{data_path}{cluster_ID}.png")
+    plt.close()
     
     best_index = coherence_ldas.index(max(coherence_ldas))
     # get best result
@@ -90,29 +86,33 @@ def do_LDA(data, cluster_ID, min_topic_num=5, max_topic_num=31, steps=5, rs=7):
 
     return LDA_models, title_bow, title_dictionary, best_index
 
+ 
 
-cluster_nums = np.unique(df["Cluster_ID"])
-LDA_models = []
-title_bow_s = []
-title_dictionary_s = []
-best=[]
+# reverse_result
+nltk_stopwords2 = stopwords.words('english')
+QUEENSLAND_RESOURCE_PERMIT = ['atp', 'daa', 'epc', 'epg', 'epm', 'epq', 'gl', 'mc', 'mdl', 
+                                'mfs', 'ml', 'oep', 'pca', 'pfl',' pga', 'pl', 'pp', 'ppl',
+                                'ppp', 'psa', 'psl', 'ql', 'wma']
+# gsq = GEOLOGICAL SURVEY OF QUEENSLAND
+# after observing the result of LDA
+OTHER_STOPWORDS = ['a-p', 'A-P', 'ap', 'AP', 'epp', 'report', 'completion', "well", 
+                    "period", "six", "area", "application", "annual", "monthly", "final",
+                    "ended", "ending"]
 
-for cluster_num in range(0, len(cluster_nums)):
-    LDA_model, title_bow, title_dictionary, best_index = do_LDA(df, cluster_num, 6, 50, 2)
-    LDA_models.append(LDA_model)
-    title_bow_s.append(title_bow)
-    title_dictionary_s.append(title_dictionary)
-    best.append(best_index)
+nltk_stopwords2.extend(QUEENSLAND_RESOURCE_PERMIT)
+nltk_stopwords2.extend(OTHER_STOPWORDS)
 
+def preprocess2(text):
+    text = text.lower()
+    words = [word for sent in sent_tokenize(text) for word in word_tokenize(sent) if word not in nltk_stopwords2 and len(word) > 1]
+    tokens = []
+    for word in words:
+        # remove the word contains both digital and letters
+        if re.search(r"\b[^\d\W]+\b", word):
+            tokens.append(word)
+    return tokens
 
-with open("LDA_models.pkl", "wb") as f:
-	pickle.dump(LDA_models, f)
-
-with open("title_bow_s.pkl", "wb") as f:
-	pickle.dump(title_bow_s, f)
-
-with open("title_dictionary_s.pkl", "wb") as f:
-	pickle.dump(title_dictionary_s, f)
-
-with open("best.pkl", "wb") as f:
-	pickle.dump(best, f)
+def set_topic_prob(row, model, dictionary, best):
+    c = row["Cluster_ID"]
+    b = dictionary[c].doc2bow(preprocess(row["Rtitle"]))
+    result = sorted(model[c][best[c]][b], key=lambda x: x[1], reverse=True)[0]
