@@ -26,7 +26,7 @@ import os, sys, re
 rs = 7
 data_path = "/home/n10367071/remote/data/"
 
-with open(data_path+"clusterr_result.pkl", "rb") as f:
+with open(data_path+"cluster_result.pkl", "rb") as f:
     cluster_result = pickle.load(f)
 
 with open(data_path+"training_data.pkl", "rb") as f:
