@@ -26,5 +26,5 @@ nums = [7,14,19,20,22,28]
 
 for num in nums:
     print(f"Cluster {num}")
-    score = silhouette_score(X, clusterrs[num-2].predict(X))
+    score = silhouette_score(X, clusters[num-2].predict(X))
     print(f"Score for k={num} is {score}")
