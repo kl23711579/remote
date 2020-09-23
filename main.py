@@ -25,6 +25,8 @@ plt.style.use('fivethirtyeight')
 import os, sys, re
 from collections import Counter
 
+from df_freq import cluster_topic_freq_word_year_10
+
 rs = 7
 data_path = "/home/n10367071/remote/data/"
 
@@ -137,73 +139,6 @@ def set_topic_prob(row, model, dictionary, best):
     result = sorted(model[c][best[c]][b], key=lambda x: x[1], reverse=True)[0]
     return result
 
-def freq_words(df):
-    clusters = np.unique(df["Cluster_ID"])
-
-    cluster_freq_words = []
-    for cluster in clusters:
-        df2 = df.loc[df["Cluster_ID"] == cluster]
-        words = df2["Words"].tolist()
-        word = [ i for x in words for i in x]
-        common = [i for i in Counter(word).most_common(10)]
-        cluster_freq_words.append(common)
-
-    with open(data_path+"freq_words/cluster_freq_words.pkl", "wb") as f:
-        pickle.dump(cluster_freq_words, f)
-
-    cluster_freq_words_years = []
-    for cluster in clusters:
-        df2 = df.loc[df["Cluster_ID"] == cluster]
-        years = np.unique(df2["Ryear"])
-        cluster_freq_words_years.append({})
-        for year in years:
-            df3 = df2.loc[df2["Ryear"] == year]
-            words = df3["Words"].tolist()
-            word = [ i for x in words for i in x]
-            common = [i for i in Counter(word).most_common(10)]
-            cluster_freq_words_years[cluster][year] = common
-
-    with open(data_path+"freq_words/cluster_freq_words_years.pkl", "wb") as f:
-        pickle.dump(cluster_freq_words_years, f)
-
-    cluster_topic_freq_words = []
-    for cluster in clusters:
-        df2 = df.loc[df["Cluster_ID"] == cluster]
-        topicids = np.unique(df2["Topic_ID"])
-        cluster_topic_freq_words.append({})
-        for topicid in topicids:
-            df3 = df2.loc[df2["Topic_ID"] == topicid]
-            words = df3["Words"].tolist()
-            word = [ i for x in words for i in x]
-            common = [i for i in Counter(word).most_common(10)]
-            cluster_topic_freq_words[cluster][topicid] = common
-
-    with open(data_path+"freq_words/cluster_topic_freq_words.pkl", "wb") as f:
-        pickle.dump(cluster_topic_freq_words, f)
-
-
-    cluster_topic_freq_words_years = []
-    clusters = np.unique(df["Cluster_ID"])
-    for cluster in clusters:
-        df2 = df.loc[df["Cluster_ID"] == cluster]
-        topicids = np.unique(df2["Topic_ID"])
-        cluster_topic_freq_words_years.append({})
-        for topicid in topicids:
-            df3 = df2.loc[df2["Topic_ID"] == topicid]
-            years = np.unique(df3["Ryear"])
-            cluster_topic_freq_words_years[cluster][topicid] = {}
-            for year in years:
-                words = df3.loc[df3["Ryear"] == year]["Words"].tolist()
-                a1 = [ i for x in words for i in x]
-                word = [ i for x in words for i in x]
-                common = [i for i in Counter(word).most_common(10)]
-                cluster_topic_freq_words_years[cluster][topicid][year] = common
-
-    with open(data_path+"freq_words/cluster_topic_freq_words_years.pkl", "wb") as f:
-        pickle.dump(cluster_topic_freq_words_years, f)
-
-    return cluster_topic_freq_words_years 
-
 def get_freq_words(row, words):
     cluster = row["Cluster_ID"]
     topic = row["Topic_ID"]
@@ -248,9 +183,9 @@ df["Words"] = df["Rtitle"].apply(preprocess2)
 
 df.to_csv(data_path+"df_lda.csv", index=False)
 
-cluster_topic_freq_words_years = freq_words(df)
+cluster_topic_freq_word_year_10 = cluster_topic_freq_word_year_10(df)
 
-df["Freq_words"] = df.apply(get_freq_words, args=(cluster_topic_freq_words_years, ),axis=1)
+df["Freq_words"] = df.apply(get_freq_words, args=(cluster_topic_freq_word_year_10, ),axis=1)
 
 df.to_csv(data_path+"df_freq.csv", index=False)
 
