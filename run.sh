@@ -6,4 +6,4 @@
 
 module load python/3.7.4-gcccore-8.3.0
 source $HOME/712/bin/activate
-python3 $HOME/remote/picture.py
+python3 $HOME/remote/s_score.py
