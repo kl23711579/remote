@@ -54,7 +54,7 @@ def get_freq_words(row, words):
 with open(data_path+"Large_preprocess.pkl", "rb") as f:
     df = pickle.load(f)
 
-clusters_number = 19
+clusters_number = 28 
 df = get_clusters(df, clusters_number)
 
 LDA_models = []
