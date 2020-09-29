@@ -21,7 +21,7 @@ def cluster_freq_word(df=None, data_path=""):
         common = dict(Counter(word))
         cluster_freq_word.append(common)
 
-    with open(data_path+"freq_words/cluster_freq_word.pkl", "wb") as f:
+    with open(data_path+"cluster_freq_word.pkl", "wb") as f:
         pickle.dump(cluster_freq_word, f)
 
 def cluster_freq_word_year(df=None, data_path=""):
@@ -41,7 +41,7 @@ def cluster_freq_word_year(df=None, data_path=""):
             common = dict(Counter(word))
             cluster_freq_words_year[cluster][year] = common
 
-    with open(data_path+"freq_words/cluster_freq_word_year.pkl", "wb") as f:
+    with open(data_path+"cluster_freq_word_year.pkl", "wb") as f:
         pickle.dump(cluster_freq_words_year, f)
 
 def cluster_topic_freq_word(df=None, data_path=""):
@@ -61,7 +61,7 @@ def cluster_topic_freq_word(df=None, data_path=""):
             common = dict(Counter(word))
             cluster_topic_freq_word[cluster][topicid] = common
 
-    with open(data_path+"freq_words/cluster_topic_freq_word.pkl", "wb") as f:
+    with open(data_path+"cluster_topic_freq_word.pkl", "wb") as f:
         pickle.dump(cluster_topic_freq_word, f)
 
 
@@ -85,7 +85,7 @@ def cluster_topic_freq_word_year(df=None, data_path=""):
                 common = dict(Counter(word))
                 cluster_topic_freq_word_year[cluster][topicid][year] = common
 
-    with open(data_path+"freq_words/cluster_topic_freq_word_year.pkl", "wb") as f:
+    with open(data_path+"cluster_topic_freq_word_year.pkl", "wb") as f:
         pickle.dump(cluster_topic_freq_word_year, f)
 
 def cluster_topic_freq_word_year_10(df=None): 
