@@ -5,9 +5,8 @@ import numpy as np
 from collections import Counter
 
 rs = 7
-data_path = "/home/n10367071/remote/data/"
 
-def cluster_freq_word(df=None):
+def cluster_freq_word(df=None, data_path=""):
     '''
     Count freq words depends on Cluster.
     '''
@@ -25,7 +24,7 @@ def cluster_freq_word(df=None):
     with open(data_path+"freq_words/cluster_freq_word.pkl", "wb") as f:
         pickle.dump(cluster_freq_word, f)
 
-def cluster_freq_word_year(df=None):
+def cluster_freq_word_year(df=None, data_path=""):
     '''
     Count freq words depends on cluster and year.
     '''
@@ -45,7 +44,7 @@ def cluster_freq_word_year(df=None):
     with open(data_path+"freq_words/cluster_freq_word_year.pkl", "wb") as f:
         pickle.dump(cluster_freq_words_year, f)
 
-def cluster_topic_freq_word(df=None):
+def cluster_topic_freq_word(df=None, data_path=""):
     '''
     Count freq word base on cluster and topic.
     '''
@@ -66,7 +65,7 @@ def cluster_topic_freq_word(df=None):
         pickle.dump(cluster_topic_freq_word, f)
 
 
-def cluster_topic_freq_word_year(df=None): 
+def cluster_topic_freq_word_year(df=None, data_path=""): 
     '''
     Count freq word base on cluster topic and year.
     '''
@@ -112,10 +111,12 @@ def cluster_topic_freq_word_year_10(df=None):
     return cluster_topic_freq_word_year
 
 if __name__ == "__main__":
+    import sys
+    data_path = "/home/n10367071/remote/data/cluster_" + str(sys.argv[1]) + "/"
     with open(data_path+"df_lda.pkl", "rb") as f:
         df = pickle.load(f)
 
-    cluster_freq_word(df)
-    cluster_freq_word_year(df)
-    cluster_topic_freq_word(df)
-    cluster_topic_freq_word_year(df)
+    cluster_freq_word(df, data_path)
+    cluster_freq_word_year(df, data_path)
+    cluster_topic_freq_word(df, data_path)
+    cluster_topic_freq_word_year(df, data_path)
