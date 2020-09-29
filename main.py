@@ -10,7 +10,7 @@ from freq_words import cluster_topic_freq_word_year_10
 from LDA import do_LDA, preprocess2, set_topic_prob
 
 rs = 7
-clusters_number = 7
+clusters_number = sys.argv[1]
 data_path = "/home/n10367071/remote/data/cluster_" + str(clusters_number) + "/" 
 
 def get_clusters(df, cluster_number):
@@ -63,7 +63,7 @@ title_dictionary_s = []
 best=[]
 
 for cluster_number in range(0, clusters_number):
-    LDA_model, title_bow, title_dictionary, best_index = do_LDA(df, cluster_number, 4, 41, 2)
+    LDA_model, title_bow, title_dictionary, best_index = do_LDA(df, cluster_number, data_path, 4, 41, 2)
     LDA_models.append(LDA_model)
     title_bow_s.append(title_bow)
     title_dictionary_s.append(title_dictionary)

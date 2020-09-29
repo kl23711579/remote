@@ -20,7 +20,6 @@ import matplotlib.pyplot as plt
 import os, sys, re
 
 rs = 7
-data_path = "/home/n10367071/remote/data/"
 
 stemmer = SnowballStemmer('english')
 nltk_stopwords = stopwords.words('english')
@@ -47,7 +46,7 @@ def preprocess_to_string(text):
     tokens = preprocess(text)
     return " ".join(tokens)
 
-def lda_tfidf(num_topics, tfidf, text, dictionary, random_state, cluster_ID):
+def lda_tfidf(num_topics, tfidf, text, dictionary, random_state, cluster_ID, data_path):
     coherence_ldas = []
     LDA_models = []
     topics = []
@@ -59,7 +58,7 @@ def lda_tfidf(num_topics, tfidf, text, dictionary, random_state, cluster_ID):
         topics.append(num_topic)
         LDA_models.append(lda_tfidfmodel)
         coherence_ldas.append(coherence_lda) 
-        
+
     plt.figure(figsize=(20,10))
     plt.plot(num_topics, coherence_ldas, marker='o', markersize=10)
     plt.savefig(f"{data_path}{cluster_ID}.png")
@@ -70,7 +69,7 @@ def lda_tfidf(num_topics, tfidf, text, dictionary, random_state, cluster_ID):
     # retuen model, topic_number
     return LDA_models, topics, best_index
 
-def do_LDA(data, cluster_ID, min_topic_num=5, max_topic_num=31, steps=5, rs=7):
+def do_LDA(data, cluster_ID, data_path, min_topic_num=5, max_topic_num=31, steps=5, rs=7):
     title = data.loc[data['Cluster_ID'] == cluster_ID]
     process_title = title["Rtitle"].map(preprocess)
     title_dictionary = corpora.Dictionary(process_title)
@@ -81,7 +80,7 @@ def do_LDA(data, cluster_ID, min_topic_num=5, max_topic_num=31, steps=5, rs=7):
     title_tfidf = tfidf[title_bow]
     title_tfidf[0]
     
-    LDA_models, topics, best_index = lda_tfidf(range(min_topic_num,max_topic_num,steps), title_tfidf, process_title, title_dictionary, rs, cluster_ID)
+    LDA_models, topics, best_index = lda_tfidf(range(min_topic_num,max_topic_num,steps), title_tfidf, process_title, title_dictionary, rs, cluster_ID, data_path)
     print("Cluster {}, topic_number = {}".format(cluster_ID, topics[best_index]))
 
     return LDA_models, title_bow, title_dictionary, best_index
