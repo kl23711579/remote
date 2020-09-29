@@ -22,7 +22,7 @@ with open(data_path+"training_data.pkl", "rb") as f:
 clusters = cluster_result[0]
 inertia_vals = cluster_result[1]
 
-nums = [24,30,38]
+nums = [7,11,17,21]
 
 for num in nums:
     print(f"Cluster {num}")
