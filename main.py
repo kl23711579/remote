@@ -6,7 +6,7 @@ import pickle
 
 import os, sys, re
 
-from freq_words import cluster_topic_freq_word_year_10
+from freq_words import cluster_topic_freq_word_year_10, cluster_freq_word, cluster_freq_word_year, cluster_topic_freq_word, cluster_topic_freq_word_year
 from LDA import do_LDA, preprocess2, set_topic_prob
 
 rs = 7
@@ -83,7 +83,7 @@ df["Freq_words"] = df.apply(get_freq_words, args=(freq_word, ),axis=1)
 
 df.to_csv(data_path+"df_final.csv", index=False)
 
-print("Work Successful!")
+print("LDA Work Successful!")
 
 with open(data_path+"LDA_models.pkl", "wb") as f:
 	pickle.dump(LDA_models, f)
@@ -100,6 +100,14 @@ with open(data_path+"best.pkl", "wb") as f:
 with open(data_path+"df_final.pkl", "wb") as f:
     pickle.dump(df, f)
 
+print("Save file Work Successful!")
+
+cluster_freq_word(df, data_path)
+cluster_freq_word_year(df, data_path)
+cluster_topic_freq_word(df, data_path)
+cluster_topic_freq_word_year(df, data_path)
+
+print("Freq words Work Successful!")
 
 
 
