@@ -10,15 +10,16 @@ from freq_words import cluster_topic_freq_word_year_10
 from LDA import do_LDA, preprocess2, set_topic_prob
 
 rs = 7
-data_path = "/home/n10367071/remote/data/"
+clusters_number = 7
+data_path = "/home/n10367071/remote/data/cluster_" + str(clusters_number) + "/" 
 
 def get_clusters(df, cluster_number):
-    with open(data_path+"cluster_result.pkl", "rb") as f:
+    with open("/home/n10367071/remote/data/cluster_result.pkl", "rb") as f:
         cluster_result = pickle.load(f)
 
     clusters = cluster_result[0]
 
-    with open(data_path+"training_data.pkl", "rb") as f:
+    with open("/home/n10367071/remote/data/training_data.pkl", "rb") as f:
         X = pickle.load(f)
 
     y = clusters[cluster_number-2].predict(X)
@@ -54,8 +55,6 @@ def get_freq_words(row, words):
 with open(data_path+"Large_preprocess.pkl", "rb") as f:
     df = pickle.load(f)
 
-clusters_number = 7
-data_path = data_path + "cluster_" + str(clusters_number) + "/" 
 df = get_clusters(df, clusters_number)
 
 LDA_models = []
