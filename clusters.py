@@ -28,7 +28,7 @@ with open(data_path+"training_data.pkl", "wb") as f:
 
 clusters = []
 inertia_vals = []
-for k in range(2,30,1):
+for k in range(2,40,1):
     model = KMeans(n_clusters=k, random_state=rs)
     model.fit(X)
     
