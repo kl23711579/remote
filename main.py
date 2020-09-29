@@ -10,7 +10,7 @@ from freq_words import cluster_topic_freq_word_year_10, cluster_freq_word, clust
 from LDA import do_LDA, preprocess2, set_topic_prob
 
 rs = 7
-clusters_number = sys.argv[1]
+clusters_number = int(sys.argv[1])
 data_path = "/home/n10367071/remote/data/cluster_" + str(clusters_number) + "/" 
 
 def get_clusters(df, cluster_number):
