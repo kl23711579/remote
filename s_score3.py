@@ -23,7 +23,7 @@ clusters = cluster_result[0]
 inertia_vals = cluster_result[1]
 
 # nums = [7,11,17,21]
-nums = list(range(10,20,1))
+nums = list(range(20,30,1))
 
 for num in nums:
     print(f"Cluster {num}")
